@@ -88,7 +88,8 @@ public class ImageAnimation : MonoBehaviour
 	{
 		if (currentAnimationState != 0)
 		{
-			rendererDelegate.sprite = textureArray[0];
+      if(textureArray.Count > 0)
+			  rendererDelegate.sprite = textureArray[0];
 			CancelInvoke("AnimationProcess");
 			currentAnimationState = ImageState.NONE;
 		}

@@ -68,7 +68,7 @@ public class BonusController : MonoBehaviour
 
         //FSnum_Text.text = SocketManager.resultData.freeSpins.count.ToString();
 
-        yield return StartCoroutine(TextAnimation(BonusInBonusText, BonusInBonusTitleRT, SocketManager.resultData.freeSpins.count - currFS, 0, true));
+        yield return StartCoroutine(TextAnimation(BonusInBonusText, BonusInBonusTitleRT, SocketManager.resultData.freeSpin.count - currFS, 0, true));
         BonusInBonusUI.SetActive(false);
         BonusInBonus_ImageAnimation.ResumeAnimation();
 
@@ -77,7 +77,7 @@ public class BonusController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        slotManager.FreeSpin(SocketManager.resultData.freeSpins.count);
+        slotManager.FreeSpin(SocketManager.resultData.freeSpin.count);
     }
 
     internal IEnumerator BonusGameEndRoutine()

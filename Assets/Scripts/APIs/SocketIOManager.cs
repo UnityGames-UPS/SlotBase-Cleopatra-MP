@@ -12,9 +12,8 @@ public class SocketIOManager : MonoBehaviour
   [SerializeField] private UIManager uiManager;
   internal GameData initialData = null;
   internal UiData initUIData = null;
-  internal GameData resultData = null;
-  internal PlayerData playerdata = null;
-  [SerializeField] internal List<string> bonusdata = null;
+  internal Root resultData = null;
+  internal Player playerdata = null;
   internal bool isResultdone = false;
   internal List<List<int>> LineData = null;
   protected string nameSpace = "playground"; //BackendChanges
@@ -23,7 +22,7 @@ public class SocketIOManager : MonoBehaviour
   private SocketManager manager;
   protected string SocketURI = null;
   // protected string TestSocketURI = "http://localhost:5001/";
-  protected string TestSocketURI = "https://r90g5j1g-5000.inc1.devtunnels.ms/";
+  protected string TestSocketURI = "https://frnp4zmn-5000.inc1.devtunnels.ms/";
   [SerializeField] internal JSFunctCalls JSManager;
   [SerializeField] private string testToken;
   protected string gameID = "SL-CLEO";
@@ -46,28 +45,6 @@ public class SocketIOManager : MonoBehaviour
     OpenSocket();
   }
 
-  void ReceiveAuthToken(string jsonData)
-  {
-    Debug.Log("Received data: " + jsonData);
-
-    // Parse the JSON data
-    var data = JsonUtility.FromJson<AuthTokenData>(jsonData);
-
-    // Proceed with connecting to the server using myAuth and socketURL
-    SocketURI = data.socketURL;
-    myAuth = data.cookie;
-    nameSpace = data.nameSpace; //BackendChanges
-  }
-
-  // IEnumerator PrintApplicationURL() 
-  // {
-  //   while (true)
-  //   {
-  //       Debug.Log("Application URL: " + Application.absoluteURL);  Unity API to get the URL
-  //     yield return new WaitForSeconds(5f);
-  //   } 
-  // }
-
   string myAuth = null;
 
   private void OpenSocket()
@@ -81,7 +58,7 @@ public class SocketIOManager : MonoBehaviour
 
     // JSManager.SendCustomMessage("authToken");
     // StartCoroutine(WaitForAuthToken(options));
-    #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
     string url = Application.absoluteURL;
     Debug.Log("Unity URL : " + url);
     ExtractUrlAndToken(url);
@@ -94,7 +71,7 @@ public class SocketIOManager : MonoBehaviour
       };
     };
     options.Auth = webAuthFunction;
-    #else
+#else
     Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
     {
       return new
@@ -103,7 +80,7 @@ public class SocketIOManager : MonoBehaviour
       };
     };
     options.Auth = authFunction;
-    #endif
+#endif
     // Proceed with connecting to the server
     SetupSocketManager(options);
   }
@@ -164,7 +141,7 @@ public class SocketIOManager : MonoBehaviour
     gameSocket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
     gameSocket.On<string>(SocketIOEventTypes.Error, OnError);
     gameSocket.On<string>("game:init", OnListenEvent);
-    gameSocket.On<string>("spin:result", OnResult);
+    gameSocket.On<string>("spin:result", OnListenEvent);
     gameSocket.On<bool>("socketState", OnSocketState);
     gameSocket.On<string>("internalError", OnSocketError);
     gameSocket.On<string>("alert", OnSocketAlert);
@@ -192,12 +169,6 @@ public class SocketIOManager : MonoBehaviour
     uiManager.DisconnectionPopup(false);
   }
 
-  void OnResult(string data)
-  {
-    print(data);
-    ParseResultData(data);
-  }
-
   private void OnError(string response)
   {
     Debug.LogError("Error: " + response);
@@ -205,7 +176,6 @@ public class SocketIOManager : MonoBehaviour
 
   private void OnListenEvent(string data)
   {
-    print(data);
     ParseResponse(data);
   }
 
@@ -274,15 +244,6 @@ public class SocketIOManager : MonoBehaviour
 #endif
   }
 
-  void ParseResultData(string json)
-  {
-    ResultData ConvertedData = JsonConvert.DeserializeObject<ResultData>(json);
-
-    resultData = new GameData();
-    resultData.ResultReel = ConvertedData.matrix;
-    isResultdone = true;
-  }
-
   private void ParseResponse(string jsonObject)
   {
     Debug.Log(jsonObject);
@@ -297,15 +258,10 @@ public class SocketIOManager : MonoBehaviour
           initialData = myData.gameData;
           initUIData = myData.uiData;
           playerdata = myData.player;
-          bonusdata = myData.BonusData;
           LineData = myData.gameData.lines;
           if (!SetInit)
           {
-            //Debug.Log(jsonObject);
-            List<string> LinesString = ConvertListListIntToListString(initialData.lines);
-            // List<string> InitialReels = ConvertListOfListsToStrings(initialData.Reel);
-            // InitialReels = RemoveQuotes(InitialReels);
-            PopulateSlotSocket(LinesString);
+            PopulateSlotSocket();
             SetInit = true;
           }
           else
@@ -321,6 +277,9 @@ public class SocketIOManager : MonoBehaviour
           // myData.message.gameData.FinalsymbolsToEmit = TransformAndRemoveRecurring(myData.message.gameData.symbolsToEmit);
           // resultData = myData.message.gameData;
           // playerdata = myData.message.player;
+
+          resultData = myData;
+          playerdata = myData.player;
           isResultdone = true;
           break;
         }
@@ -344,7 +303,7 @@ public class SocketIOManager : MonoBehaviour
     uiManager.InitialiseUIData(initUIData.paylines);
   }
 
-  private void PopulateSlotSocket(List<string> LineIds)
+  private void PopulateSlotSocket()
   {
     slotManager.shuffleInitialMatrix();
 
@@ -465,155 +424,103 @@ public class SocketIOManager : MonoBehaviour
 }
 
 [Serializable]
-public class ResultData
-{
-  public bool success;
-  public double balance;
-  public List<List<string>> matrix { get; set; }
-}
-
-
-[Serializable]
-public class BetData
-{
-  public double currentBet;
-  public double currentLines;
-  public double spins;
-}
-
-[Serializable]
-public class AuthData
-{
-  public string GameID;
-}
-
-[Serializable]
 public class MessageData
 {
   public int currentBet;
 }
 
 [Serializable]
-public class ExitData
-{
-  public string id;
-}
-
-[Serializable]
-public class InitData
-{
-  public AuthData Data;
-  public string id;
-}
-
-[Serializable]
-public class AbtLogo
-{
-  public string logoSprite { get; set; }
-  public string link { get; set; }
-}
-
-[Serializable]
 public class GameData
 {
-  public List<List<string>> Reel { get; set; }
-  public List<List<int>> lines { get; set; }
-  public List<double> bets { get; set; }
-  public bool canSwitchLines { get; set; }
-  public List<int> LinesCount { get; set; }
-  public List<int> autoSpin { get; set; }
-  public List<List<string>> ResultReel { get; set; }
-  public List<int> linesToEmit { get; set; }
-  public List<List<string>> symbolsToEmit { get; set; }
-  public double WinAmout { get; set; }
-  public FreeSpins freeSpins { get; set; }
-  public List<string> FinalsymbolsToEmit { get; set; }
-  public List<string> FinalResultReel { get; set; }
-  public double jackpot { get; set; }
-  public bool isBonus { get; set; }
-  public double BonusStopIndex { get; set; }
+  public List<List<int>> lines;
+  public List<double> bets;
+  public List<int> spinBonus;
+}
+
+[Serializable]
+public class Paylines
+{
+  public List<Symbol> symbols;
+}
+
+[Serializable]
+public class Player
+{
+  public double balance;
 }
 
 [Serializable]
 public class FreeSpins
 {
   public int count { get; set; }
-  public bool isNewAdded { get; set; }
+  public bool isFreeSpin { get; set; }
+}
+
+[SerializeField]
+public class Bonus
+{
+  public int BonusSpinStopIndex { get; set; }
+  public double amount { get; set; }
 }
 
 [Serializable]
 public class Root
 {
-  public string id { get; set; }
-  public GameData gameData { get; set; }
-  public UiData uiData { get; set; }
-  public PlayerData player { get; set; }
-  public List<string> BonusData { get; set; }
+  //Result Data
+  public bool success { get; set; }
+  public List<List<string>> matrix { get; set; }
+  public string name { get; set; }
+  public Payload payload { get; set; }
+  public Bonus bonus { get; set; }
+  public Jackpot jackpot { get; set; }
+  public Scatter scatter { get; set; }
+  public FreeSpins freeSpin { get; set; }
+
+  //Init Data
+  public string id;
+  public GameData gameData;
+  public UiData uiData;
+  public Player player;
 }
 
 [Serializable]
-public class UiData
+public class Scatter
 {
-  public Paylines paylines { get; set; }
-  public List<string> spclSymbolTxt { get; set; }
-  public AbtLogo AbtLogo { get; set; }
-  public string ToULink { get; set; }
-  public string PopLink { get; set; }
+  public double amount { get; set; }
+}
+[Serializable]
+public class Jackpot
+{
+  public bool isTriggered { get; set; }
+  public double amount { get; set; }
 }
 
 [Serializable]
-public class Paylines
+public class Payload
 {
-  public List<Symbol> symbols { get; set; }
+  public double winAmount { get; set; }
+  public List<Win> wins { get; set; }
+}
+
+[Serializable]
+public class Win
+{
+  public int line { get; set; }
+  public List<int> positions { get; set; }
+  public double amount { get; set; }
 }
 
 [Serializable]
 public class Symbol
 {
-  public int id { get; set; }
-  public string name { get; set; }
-  public List<int> multiplier { get; set; }
-  // [JsonProperty("multiplier")]
-  // public object MultiplierObject { get; set; }
-
-  // // This property will hold the properly deserialized list of lists of integers
-  // [JsonIgnore]
-  // public List<List<int>> Multiplier { get; private set; }
-
-  // // Custom deserialization method to handle the conversion
-  // [OnDeserialized]
-  // internal void OnDeserializedMethod(StreamingContext context)
-  // {
-  //   // Handle the case where multiplier is an object (empty in JSON)
-  //   if (MultiplierObject is JObject)
-  //   {
-  //     Multiplier = new List<List<int>>();
-  //   }
-  //   else
-  //   {
-  //     // Deserialize normally assuming it's an array of arrays
-  //     Multiplier = JsonConvert.DeserializeObject<List<List<int>>>(MultiplierObject.ToString());
-  //   }
-  // }
-  public object defaultAmount { get; set; }
-  public object symbolsCount { get; set; }
-  public object increaseValue { get; set; }
-  public string description { get; set; }
-  public int freeSpin { get; set; }
+  public int id;
+  public string name;
+  public List<int> multiplier;
+  public string description;
 }
+
 [Serializable]
-public class PlayerData
+public class UiData
 {
-  public double Balance { get; set; }
-  public double haveWon { get; set; }
-  public double currentWining { get; set; }
+  public Paylines paylines;
 }
-[Serializable]
-public class AuthTokenData
-{
-  public string cookie;
-  public string socketURL;
-  public string nameSpace; //BackendChanges
-}
-
-
