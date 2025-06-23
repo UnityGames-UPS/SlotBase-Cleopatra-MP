@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Slot-Cleopatra.sln"
+    "dotnet.defaultSolution": "SlotBase-Cleopatra-MP.sln"
 }
