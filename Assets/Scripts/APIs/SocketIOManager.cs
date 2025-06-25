@@ -92,9 +92,33 @@ public class SocketIOManager : MonoBehaviour
     options.Reconnection = true;
     options.ConnectWith = Best.SocketIO.Transports.TransportTypes.WebSocket;
 
+    // #if UNITY_WEBGL && !UNITY_EDITOR
+    //     JSManager.SendCustomMessage("authToken");
+    //     StartCoroutine(WaitForAuthToken(options));
+    // #else
+    //     Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
+    //     {
+    //       return new
+    //       {
+    //         token = TestToken,
+    //       };
+    //     };
+    //     options.Auth = authFunction;
+    //     SetupSocketManager(options);
+    // #endif
 #if UNITY_WEBGL && !UNITY_EDITOR
-    JSManager.SendCustomMessage("authToken");
-    StartCoroutine(WaitForAuthToken(options));
+    string url = Application.absoluteURL;
+    Debug.Log("Unity URL : " + url);
+    ExtractUrlAndToken(url);
+
+    Func<SocketManager, Socket, object> webAuthFunction = (manager, socket) =>
+    {
+      return new
+      {
+        token = TestToken,
+      };
+    };
+    options.Auth = webAuthFunction;
 #else
     Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
     {
@@ -104,9 +128,9 @@ public class SocketIOManager : MonoBehaviour
       };
     };
     options.Auth = authFunction;
-    SetupSocketManager(options);
 #endif
     // Proceed with connecting to the server
+    SetupSocketManager(options);
   }
 
   private void SetupSocketManager(SocketOptions options)
@@ -217,16 +241,16 @@ public class SocketIOManager : MonoBehaviour
 
   internal void CloseSocket()
   {
-    // SendDataWithNamespace("EXIT");
-#if UNITY_WEBGL && !UNITY_EDITOR
-    JSManager.SendCustomMessage("OnExit");
-#endif
-    if (Manager != null)
-    {
-      Debug.Log("Disposing my Socket");
-      GameSocket.Disconnect();
-      Manager.Close();
-    }
+    SendDataWithNamespace("game:exit");
+// #if UNITY_WEBGL && !UNITY_EDITOR
+//     JSManager.SendCustomMessage("OnExit");
+// #endif
+//     if (Manager != null)
+//     {
+//       Debug.Log("Disposing my Socket");
+//       GameSocket.Disconnect();
+//       Manager.Close();
+//     }
   }
 
   private void ParseResponse(string jsonObject)
@@ -268,13 +292,46 @@ public class SocketIOManager : MonoBehaviour
           if (GameSocket != null)
           {
             Debug.Log("Dispose my Socket");
+            GameSocket.Disconnect();
             this.Manager.Close();
           }
+#if UNITY_WEBGL && !UNITY_EDITOR
+          JSManager.SendCustomMessage("OnExit");
+#endif
           break;
         }
     }
   }
+  public void ExtractUrlAndToken(string fullUrl)
+  {
+    Uri uri = new Uri(fullUrl);
+    string query = uri.Query; // Gets the query part, e.g., "?url=http://localhost:5000&token=e5ffa84216be4972a85fff1d266d36d0"
 
+    Dictionary<string, string> queryParams = new Dictionary<string, string>();
+    string[] pairs = query.TrimStart('?').Split('&');
+
+    foreach (string pair in pairs)
+    {
+      string[] kv = pair.Split('=');
+      if (kv.Length == 2)
+      {
+        queryParams[kv[0]] = Uri.UnescapeDataString(kv[1]);
+      }
+    }
+
+    if (queryParams.TryGetValue("url", out string extractedUrl) &&
+        queryParams.TryGetValue("token", out string token))
+    {
+      Debug.Log("Extracted URL: " + extractedUrl);
+      Debug.Log("Extracted Token: " + token);
+      TestToken = token;
+      SocketURI = extractedUrl;
+    }
+    else
+    {
+      Debug.LogError("URL or token not found in query parameters.");
+    }
+  }
   private void RefreshUI()
   {
     UiManager.InitialiseUIData(InitUiData.paylines);
