@@ -92,45 +92,45 @@ public class SocketIOManager : MonoBehaviour
     options.Reconnection = true;
     options.ConnectWith = Best.SocketIO.Transports.TransportTypes.WebSocket;
 
-    // #if UNITY_WEBGL && !UNITY_EDITOR
-    //     JSManager.SendCustomMessage("authToken");
-    //     StartCoroutine(WaitForAuthToken(options));
-    // #else
-    //     Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
-    //     {
-    //       return new
-    //       {
-    //         token = TestToken,
-    //       };
-    //     };
-    //     options.Auth = authFunction;
-    //     SetupSocketManager(options);
-    // #endif
-#if UNITY_WEBGL && !UNITY_EDITOR
-    string url = Application.absoluteURL;
-    Debug.Log("Unity URL : " + url);
-    ExtractUrlAndToken(url);
+    #if UNITY_WEBGL && !UNITY_EDITOR
+        JSManager.SendCustomMessage("authToken");
+        StartCoroutine(WaitForAuthToken(options));
+    #else
+        Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
+        {
+          return new
+          {
+            token = TestToken,
+          };
+        };
+        options.Auth = authFunction;
+        SetupSocketManager(options);
+    #endif
+// #if UNITY_WEBGL && !UNITY_EDITOR
+//     string url = Application.absoluteURL;
+//     Debug.Log("Unity URL : " + url);
+//     ExtractUrlAndToken(url);
 
-    Func<SocketManager, Socket, object> webAuthFunction = (manager, socket) =>
-    {
-      return new
-      {
-        token = TestToken,
-      };
-    };
-    options.Auth = webAuthFunction;
-#else
-    Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
-    {
-      return new
-      {
-        token = TestToken,
-      };
-    };
-    options.Auth = authFunction;
-#endif
-    // Proceed with connecting to the server
-    SetupSocketManager(options);
+//     Func<SocketManager, Socket, object> webAuthFunction = (manager, socket) =>
+//     {
+//       return new
+//       {
+//         token = TestToken,
+//       };
+//     };
+//     options.Auth = webAuthFunction;
+// #else
+//     Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
+//     {
+//       return new
+//       {
+//         token = TestToken,
+//       };
+//     };
+//     options.Auth = authFunction;
+// #endif
+//     // Proceed with connecting to the server
+//     SetupSocketManager(options);
   }
 
   private void SetupSocketManager(SocketOptions options)
@@ -242,15 +242,15 @@ public class SocketIOManager : MonoBehaviour
   internal void CloseSocket()
   {
     SendDataWithNamespace("game:exit");
-// #if UNITY_WEBGL && !UNITY_EDITOR
-//     JSManager.SendCustomMessage("OnExit");
-// #endif
 //     if (Manager != null)
 //     {
 //       Debug.Log("Disposing my Socket");
 //       GameSocket.Disconnect();
 //       Manager.Close();
 //     }
+#if UNITY_WEBGL && !UNITY_EDITOR
+    JSManager.SendCustomMessage("OnExit");
+#endif
   }
 
   private void ParseResponse(string jsonObject)
