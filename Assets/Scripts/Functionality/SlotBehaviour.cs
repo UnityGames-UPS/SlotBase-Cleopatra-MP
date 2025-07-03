@@ -77,7 +77,9 @@ public class SlotBehaviour : MonoBehaviour
   private bool IsStopTweening;
   internal bool CheckPopups = false;
   internal bool IsSpinning = false;
-
+  private List<ImageAnimation> SpecialAnimation = new();
+  private float DefaultWinLineDelay = 2f;
+  private float TurboWinLineDelay = 0.5f;
   private void Start()
   {
     IsAutoSpin = false;
@@ -441,9 +443,10 @@ public class SlotBehaviour : MonoBehaviour
       }
     }
 
-    if (IsTurboOn)
+    if (IsTurboOn && IsFreeSpin)
     {
       yield return new WaitForSeconds(0.1f);
+      StopSpinToggle = true; 
     }
     else
     {
@@ -468,7 +471,7 @@ public class SlotBehaviour : MonoBehaviour
 
     if (SocketManager.ResultData.payload.winAmount > 0)
     {
-      SpinDelay = 1.2f;
+      SpinDelay = 1f;
     }
     else
     {
@@ -483,7 +486,7 @@ public class SlotBehaviour : MonoBehaviour
 
     if (SocketManager.ResultData.jackpot.amount > 0) // Check for jackpot or winnings popups
     {
-      yield return PlaySpecialSymbolAnimation(12);
+      PlaySpecialSymbolAnimation(12);
       uiManager.PopulateWin(4);
     }
     else if (!bonus)
@@ -501,10 +504,18 @@ public class SlotBehaviour : MonoBehaviour
     }
 
     yield return new WaitUntil(() => !CheckPopups);
+    // while (CheckPopups)
+    // {
+    //   yield return null;
+    // }
 
     if ((IsFreeSpin || IsAutoSpin) && BoxAnimRoutine != null && !WinAnimationFin) // Waits for winning payline animation to finish when triggered bonus
     {
       yield return new WaitUntil(() => WinAnimationFin);
+      // while (WinAnimationFin)
+      // {
+      //   yield return null;
+      // }
       StopGameAnimation();
     }
 
@@ -518,7 +529,7 @@ public class SlotBehaviour : MonoBehaviour
 
       yield return new WaitForSeconds(1f);
 
-      yield return PlaySpecialSymbolAnimation(11);
+      PlaySpecialSymbolAnimation(11);
 
       yield return new WaitForSeconds(1f);
 
@@ -551,9 +562,9 @@ public class SlotBehaviour : MonoBehaviour
   }
   #endregion
 
-  IEnumerator PlaySpecialSymbolAnimation(int symbolId)
+  void PlaySpecialSymbolAnimation(int symbolId)
   {
-    List<ImageAnimation> TempList = new List<ImageAnimation>();
+    SpecialAnimation.Clear();
     for (int i = 0; i < 3; i++)
     {
       for (int j = 0; j < 5; j++)
@@ -565,20 +576,10 @@ public class SlotBehaviour : MonoBehaviour
           if (anim.textureArray.Count > 0)
           {
             anim.doLoopAnimation = false;
-            TempList.Add(anim);
+            SpecialAnimation.Add(anim);
             anim.StartAnimation();
           }
         }
-      }
-    }
-
-    if (TempList.Count > 0)
-    {
-      ImageAnimation anim = TempList[^1];
-      yield return new WaitUntil(() => anim.rendererDelegate.sprite == anim.textureArray[^1]);
-      foreach (ImageAnimation tempAnim in TempList)
-      {
-        tempAnim.StopAnimation();
       }
     }
   }
@@ -795,10 +796,10 @@ public class SlotBehaviour : MonoBehaviour
         if (wins.Count < 2)
         {
           WinAnimationFin = true;
-          yield return new WaitForSeconds(2f);
+          yield return new WaitForSeconds(IsTurboOn ? TurboWinLineDelay : DefaultWinLineDelay);
           yield break;
         }
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(IsTurboOn ? TurboWinLineDelay : DefaultWinLineDelay);
         for (int s = 0; s < 5; s++)
         {
           if (TempBoxScripts[s].boxScripts[SocketManager.LineData[wins[i].line][s]].isAnim)
@@ -859,12 +860,18 @@ public class SlotBehaviour : MonoBehaviour
   //Stop the icons animation
   internal void StopGameAnimation()
   {
+    CheckPopups = false;
     if (BoxAnimRoutine != null)
     {
       StopCoroutine(BoxAnimRoutine);
       BoxAnimRoutine = null;
       WinAnimationFin = true;
     }
+    foreach (ImageAnimation anim in SpecialAnimation)
+    {
+      anim.StopAnimation();
+    }
+    SpecialAnimation.Clear();
 
     if (TempBoxScripts.Count > 0)
     {
@@ -890,6 +897,8 @@ public class SlotBehaviour : MonoBehaviour
       TempList.Clear();
       TempList.TrimExcess();
     }
+
+
 
     PayCalculator.DontDestroyLines.Clear();
     PayCalculator.DontDestroyLines.TrimExcess();

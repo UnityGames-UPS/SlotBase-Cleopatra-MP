@@ -463,7 +463,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -5964,8 +5964,8 @@ MonoBehaviour:
   SlotManager: {fileID: 2046803210}
   UiManager: {fileID: 377874625}
   JSManager: {fileID: 1604285695}
-  TestSocketURI: https://frnp4zmn-5000.inc1.devtunnels.ms/
-  TestToken: 5e7e9ee221ea4a29845fec20ede675c1
+  TestSocketURI: http://localhost:5000/
+  TestToken: 276837ead7234633ad127200e889e0ff
 --- !u!1 &500673622
 GameObject:
   m_ObjectHideFlags: 0
@@ -24678,7 +24678,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0000
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -24705,12 +24705,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.9
+  m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMin: 22
+  m_fontSizeMax: 70.6
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -24721,7 +24721,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -26083,7 +26083,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -28924,12 +28924,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 55e330870dd194ff3a110bd513c8a14b, type: 3}
   - {fileID: 8300000, guid: 0ac6bd293637f40c99c972476ad95988, type: 3}
   - {fileID: 8300000, guid: 76cd008638a4b4754b7348c8f57b2896, type: 3}
-  Bonusclips:
-  - {fileID: 8300000, guid: b11f1890e37aa42b8ae1396e5a1ea7fa, type: 3}
-  - {fileID: 8300000, guid: 317ac723d1c9b4a09a52c3b9de61d4a6, type: 3}
   bg_audioBonus: {fileID: 2088709731818720374}
   audioPlayer_Bonus: {fileID: 4701576512886553455}
-  slotBehaviour: {fileID: 0}
 --- !u!82 &1099861978960025974
 AudioSource:
   m_ObjectHideFlags: 0

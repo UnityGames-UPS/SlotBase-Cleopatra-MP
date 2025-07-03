@@ -380,9 +380,10 @@ public class UIManager : MonoBehaviour
       ImageScaleTween.Kill();
       ImageScaleTween = null;
     }
+    bool jackpotActive = false;
     if (JackpotImageAnimation.currentAnimationState == ImageAnimation.ImageState.PLAYING)
     {
-      JackpotImageAnimation.StopAnimation();
+      jackpotActive = true;
     }
     if (AnimationScaleTween != null)
     {
@@ -394,7 +395,14 @@ public class UIManager : MonoBehaviour
       DelayTween.Kill();
       DelayTween = null;
     }
-    Win_Image.rectTransform.DOScale(Vector3.zero, .2f).SetEase(Ease.InBack).OnComplete(() => ClosePopup(WinPopup_Object));
+    Win_Image.rectTransform.DOScale(Vector3.zero, .2f).SetEase(Ease.InBack).OnComplete(() =>
+    {
+      ClosePopup(WinPopup_Object);
+      if (jackpotActive)
+      {
+        JackpotImageAnimation.StopAnimation();
+      }
+    });
     WinBgAnimation.DOScale(Vector3.zero, .2f).SetEase(Ease.InBack).OnComplete(() => ImageRotationTween.Kill());
     slotManager.CheckPopups = false;
   }
