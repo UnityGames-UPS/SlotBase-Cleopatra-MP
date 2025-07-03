@@ -156,7 +156,7 @@ public class SocketIOManager : MonoBehaviour
     GameSocket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
     GameSocket.On<string>(SocketIOEventTypes.Error, OnError);
     GameSocket.On<string>("game:init", OnListenEvent);
-    GameSocket.On<string>("spin:result", OnListenEvent);
+    GameSocket.On<string>("result", OnListenEvent);
     GameSocket.On<bool>("socketState", OnSocketState);
     GameSocket.On<string>("internalError", OnSocketError);
     GameSocket.On<string>("alert", OnSocketAlert);
@@ -350,18 +350,29 @@ public class SocketIOManager : MonoBehaviour
   {
     IsResultDone = false;
     MessageData message = new MessageData();
-    message.currentBet = currBet;
+    message.type = "SPIN";
+    message.payload.betIndex = currBet;
 
     // Serialize message data to JSON
     string json = JsonUtility.ToJson(message);
-    SendDataWithNamespace("spin:request", json);
+    SendDataWithNamespace("request", json);
   }
 }
 
 [Serializable]
 public class MessageData
 {
-  public int currentBet;
+  public string type;
+  public Data payload = new();
+
+}
+[Serializable]
+public class Data
+{
+  public int betIndex;
+  public string Event;
+  public List<int> index;
+  public int option;
 }
 
 [Serializable]
