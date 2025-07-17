@@ -85,11 +85,14 @@ public class SocketIOManager : MonoBehaviour
 
   private void OpenSocket()
   {
+    Debug.Log("Opening Socket");
     //Create and setup SocketOptions
     SocketOptions options = new SocketOptions();
-    options.ReconnectionAttempts = maxReconnectionAttempts;
-    options.ReconnectionDelay = reconnectionDelay;
-    options.Reconnection = true;
+    options.Timeout = TimeSpan.FromSeconds(3);
+    options.Reconnection = false;
+    // options.ReconnectionAttempts = maxReconnectionAttempts;
+    // options.ReconnectionDelay = reconnectionDelay;
+    // options.Reconnection = true;
     options.ConnectWith = Best.SocketIO.Transports.TransportTypes.WebSocket;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
