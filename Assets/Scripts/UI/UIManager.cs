@@ -343,7 +343,7 @@ public class UIManager : MonoBehaviour
     OpenPopup(LBPopup_Object);
   }
 
-  internal void DisconnectionPopup(bool isReconnection)
+  internal void DisconnectionPopup()
   {
     if (!isExit)
     {

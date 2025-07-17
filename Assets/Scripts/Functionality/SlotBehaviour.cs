@@ -725,11 +725,9 @@ public class SlotBehaviour : MonoBehaviour
 
   void CheckWinLines(List<Win> wins, double jackpot = 0)
   {
-    if (wins.Count <= 0)
-    {
-      return;
-    }
-
+    if (audioController && (wins.Count > 0 || jackpot > 0))
+      audioController.PlayWLAudio("win");
+    
     if (jackpot > 0)
     {
       if (audioController) audioController.PlayWLAudio("megaWin");
@@ -742,23 +740,25 @@ public class SlotBehaviour : MonoBehaviour
       }
     }
 
-    if (audioController) audioController.PlayWLAudio("win");
-    List<KeyValuePair<int, int>> coords = new();
-    for (int j = 0; j < wins.Count; j++)
+    if (wins.Count > 0)
     {
-      for (int k = 0; k < wins[j].positions.Count; k++)
+      List<KeyValuePair<int, int>> coords = new();
+      for (int j = 0; j < wins.Count; j++)
       {
-        int rowIndex = SocketManager.InitialData.lines[wins[j].line][k];
-        int columnIndex = k;
-        coords.Add(new KeyValuePair<int, int>(rowIndex, columnIndex));
+        for (int k = 0; k < wins[j].positions.Count; k++)
+        {
+          int rowIndex = SocketManager.InitialData.lines[wins[j].line][k];
+          int columnIndex = k;
+          coords.Add(new KeyValuePair<int, int>(rowIndex, columnIndex));
+        }
       }
-    }
 
-    foreach (var coord in coords)
-    {
-      int rowIndex = coord.Key;
-      int columnIndex = coord.Value;
-      StartGameAnimation(Tempimages[columnIndex].slotImages[rowIndex].gameObject, TempBoxScripts[columnIndex].boxScripts[rowIndex]);
+      foreach (var coord in coords)
+      {
+        int rowIndex = coord.Key;
+        int columnIndex = coord.Value;
+        StartGameAnimation(Tempimages[columnIndex].slotImages[rowIndex].gameObject, TempBoxScripts[columnIndex].boxScripts[rowIndex]);
+      }
     }
 
     if (!SocketManager.ResultData.freeSpin.isFreeSpin)
@@ -771,7 +771,8 @@ public class SlotBehaviour : MonoBehaviour
       if (BonusSkipWinAnimation_Button) BonusSkipWinAnimation_Button.gameObject.SetActive(true);
     }
 
-    BoxAnimRoutine = StartCoroutine(WinLineLoopRoutine(wins));
+    if (wins.Count > 0)
+      BoxAnimRoutine = StartCoroutine(WinLineLoopRoutine(wins));
 
     CheckSpinAudio = false;
   }

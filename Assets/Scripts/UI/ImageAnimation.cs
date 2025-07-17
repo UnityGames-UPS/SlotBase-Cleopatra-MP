@@ -22,12 +22,16 @@ public class ImageAnimation : MonoBehaviour
   private float delayBetweenAnimation;
   public float AnimationSpeed = 5f;
   public float delayBetweenLoop;
-
+  public bool PlayOnAwake = false;
   private void Awake()
   {
     if (Instance == null)
     {
       Instance = this;
+    }
+    if (PlayOnAwake)
+    {
+      StartAnimation();
     }
   }
 

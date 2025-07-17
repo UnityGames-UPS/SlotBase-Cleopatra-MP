@@ -1141,6 +1141,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &65963192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2223,6 +2224,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -74.3}
   m_SizeDelta: {x: 251.96, y: 62.99}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &166525018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 166525020}
+  - component: {fileID: 166525019}
+  m_Layer: 0
+  m_Name: InternetChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &166525019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166525018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4beb9a3eb41e845b9aa6af8eb11838e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkInterval: 5
+  uIManager: {fileID: 377874625}
+  socketIOManager: {fileID: 500036492}
+--- !u!4 &166525020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166525018}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.8598732, y: 0.771443, z: -5.8360167}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &169476488
 GameObject:
   m_ObjectHideFlags: 0
@@ -2346,6 +2394,7 @@ MonoBehaviour:
   doLoopAnimation: 0
   AnimationSpeed: 20
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!1 &177841705
 GameObject:
   m_ObjectHideFlags: 0
@@ -3473,6 +3522,7 @@ MonoBehaviour:
   doLoopAnimation: 0
   AnimationSpeed: 15
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &314603293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4329,6 +4379,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &379481117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5965,7 +6016,7 @@ MonoBehaviour:
   UiManager: {fileID: 377874625}
   JSManager: {fileID: 1604285695}
   TestSocketURI: http://localhost:5000/
-  TestToken: 276837ead7234633ad127200e889e0ff
+  TestToken: ac843a2047b348ac8517575d64e3a425
 --- !u!1 &500673622
 GameObject:
   m_ObjectHideFlags: 0
@@ -7259,6 +7310,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &560746336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8348,6 +8400,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &619959778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8684,6 +8737,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &633401709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13627,6 +13681,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &961627815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13938,6 +13993,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &982187668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14059,6 +14115,7 @@ MonoBehaviour:
   doLoopAnimation: 0
   AnimationSpeed: 10
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!1 &1007509613
 GameObject:
   m_ObjectHideFlags: 0
@@ -14156,6 +14213,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &1007509618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14342,6 +14400,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &1040283560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18289,6 +18348,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &1333651443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18400,6 +18460,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &1342066091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20619,6 +20680,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &1496255623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20730,6 +20792,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &1499993327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21439,6 +21502,7 @@ MonoBehaviour:
   doLoopAnimation: 0
   AnimationSpeed: 15
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &1539735768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23137,6 +23201,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 12
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!1 &1680215423
 GameObject:
   m_ObjectHideFlags: 0
@@ -24353,6 +24418,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &1768437713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27109,6 +27175,7 @@ MonoBehaviour:
   doLoopAnimation: 1
   AnimationSpeed: 5
   delayBetweenLoop: 0
+  PlayOnAwake: 0
 --- !u!114 &1947494052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29586,3 +29653,4 @@ SceneRoots:
   - {fileID: 8217964018994044620}
   - {fileID: 5907248699278876388}
   - {fileID: 1604285696}
+  - {fileID: 166525020}

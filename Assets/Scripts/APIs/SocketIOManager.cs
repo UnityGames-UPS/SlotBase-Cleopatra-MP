@@ -11,7 +11,7 @@ public class SocketIOManager : MonoBehaviour
   [SerializeField] private SlotBehaviour SlotManager;
   [SerializeField] private UIManager UiManager;
   [SerializeField] internal JSFunctCalls JSManager;
-  [SerializeField] protected string TestSocketURI = "https://frnp4zmn-5000.inc1.devtunnels.ms/";
+  [SerializeField] internal string TestSocketURI = "https://frnp4zmn-5000.inc1.devtunnels.ms/";
   [SerializeField] private string TestToken;
 
   internal GameData InitialData = null;
@@ -22,7 +22,7 @@ public class SocketIOManager : MonoBehaviour
   internal bool IsResultDone = false;
   internal bool SetInit = false;
 
-  protected string SocketURI = null;
+  internal string SocketURI = null;
   protected string NameSpace = "playground";
   protected string myAuth;
   protected string nameSpace;
@@ -174,7 +174,7 @@ public class SocketIOManager : MonoBehaviour
   {
     Debug.Log("Disconnected from the server");
     StopAllCoroutines();
-    UiManager.DisconnectionPopup(false);
+    UiManager.DisconnectionPopup();
   }
 
   private void OnError(string response)
@@ -242,12 +242,6 @@ public class SocketIOManager : MonoBehaviour
   internal void CloseSocket()
   {
     SendDataWithNamespace("game:exit");
-    //     if (Manager != null)
-    //     {
-    //       Debug.Log("Disposing my Socket");
-    //       GameSocket.Disconnect();
-    //       Manager.Close();
-    //     }
 #if UNITY_WEBGL && !UNITY_EDITOR
     JSManager.SendCustomMessage("OnExit");
 #endif
@@ -380,7 +374,6 @@ public class GameData
 {
   public List<List<int>> lines;
   public List<double> bets;
-  public List<int> spinBonus;
 }
 
 [Serializable]
@@ -434,6 +427,7 @@ public class Scatter
 {
   public double amount { get; set; }
 }
+
 [Serializable]
 public class Jackpot
 {
@@ -470,6 +464,7 @@ public class UiData
 {
   public Paylines paylines;
 }
+
 [Serializable]
 public class AuthTokenData
 {
