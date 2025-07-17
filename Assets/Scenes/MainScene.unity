@@ -5969,7 +5969,7 @@ MonoBehaviour:
   UiManager: {fileID: 377874625}
   JSManager: {fileID: 1604285695}
   TestSocketURI: http://localhost:5000/
-  TestToken: ac843a2047b348ac8517575d64e3a425
+  TestToken: e0ed4b3cfac04eb1b03efe4b1b7402ac
 --- !u!1 &500673622
 GameObject:
   m_ObjectHideFlags: 0
@@ -27935,8 +27935,6 @@ MonoBehaviour:
   AutoSpinStop_Button: {fileID: 649775510}
   TotalBetPlus_Button: {fileID: 939590060}
   TotalBetMinus_Button: {fileID: 751808322}
-  LineBetPlus_Button: {fileID: 3679504}
-  LineBetMinus_Button: {fileID: 1206313711}
   SkipWinAnimation_Button: {fileID: 773768606}
   BonusSkipWinAnimation_Button: {fileID: 1198752471}
   Turbo_Button: {fileID: 1675344761}

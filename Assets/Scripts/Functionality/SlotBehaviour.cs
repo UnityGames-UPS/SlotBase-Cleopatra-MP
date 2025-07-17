@@ -26,8 +26,6 @@ public class SlotBehaviour : MonoBehaviour
   [SerializeField] private Button AutoSpinStop_Button;
   [SerializeField] private Button TotalBetPlus_Button;
   [SerializeField] private Button TotalBetMinus_Button;
-  [SerializeField] private Button LineBetPlus_Button;
-  [SerializeField] private Button LineBetMinus_Button;
   [SerializeField] private Button SkipWinAnimation_Button;
   [SerializeField] private Button BonusSkipWinAnimation_Button;
   [SerializeField] private Button Turbo_Button;
@@ -106,20 +104,6 @@ public class SlotBehaviour : MonoBehaviour
 
     if (TotalBetMinus_Button) TotalBetMinus_Button.onClick.RemoveAllListeners();
     if (TotalBetMinus_Button) TotalBetMinus_Button.onClick.AddListener(delegate
-    {
-      uiManager.CanCloseMenu();
-      ChangeBet(false);
-    });
-
-    if (LineBetPlus_Button) LineBetPlus_Button.onClick.RemoveAllListeners();
-    if (LineBetPlus_Button) LineBetPlus_Button.onClick.AddListener(delegate
-    {
-      uiManager.CanCloseMenu();
-      ChangeBet(true);
-    });
-
-    if (LineBetMinus_Button) LineBetMinus_Button.onClick.RemoveAllListeners();
-    if (LineBetMinus_Button) LineBetMinus_Button.onClick.AddListener(delegate
     {
       uiManager.CanCloseMenu();
       ChangeBet(false);
@@ -761,12 +745,12 @@ public class SlotBehaviour : MonoBehaviour
       }
     }
 
-    if (!SocketManager.ResultData.freeSpin.isFreeSpin)
+    if (!SocketManager.ResultData.freeSpin.isFreeSpin && (wins.Count > 0 || jackpot > 0))
     {
       if (SkipWinAnimation_Button) SkipWinAnimation_Button.gameObject.SetActive(true);
     }
 
-    if (IsFreeSpin && !SocketManager.ResultData.freeSpin.isFreeSpin)
+    if (IsFreeSpin && !SocketManager.ResultData.freeSpin.isFreeSpin && (wins.Count > 0 || jackpot > 0))
     {
       if (BonusSkipWinAnimation_Button) BonusSkipWinAnimation_Button.gameObject.SetActive(true);
     }
@@ -833,16 +817,8 @@ public class SlotBehaviour : MonoBehaviour
   {
     if (SlotStart_Button) SlotStart_Button.interactable = toggle;
     if (AutoSpin_Button && !IsAutoSpin) AutoSpin_Button.interactable = toggle;
-    if (BetCounter != 0)
-    {
-      if (LineBetMinus_Button) LineBetMinus_Button.interactable = toggle;
-      if (TotalBetMinus_Button) TotalBetMinus_Button.interactable = toggle;
-    }
-    if (BetCounter < SocketManager.InitialData.bets.Count - 1)
-    {
-      if (LineBetPlus_Button) LineBetPlus_Button.interactable = toggle;
-      if (TotalBetPlus_Button) TotalBetPlus_Button.interactable = toggle;
-    }
+    if (TotalBetMinus_Button) TotalBetMinus_Button.interactable = toggle;
+    if (TotalBetPlus_Button) TotalBetPlus_Button.interactable = toggle;
   }
 
   //Start the icons animation
