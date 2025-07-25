@@ -23,6 +23,9 @@ public class UIManager : MonoBehaviour
   private Tween AnimationScaleTween;
   private Tween DelayTween;
 
+  [Header("Reconnection Popup")]
+  [SerializeField] private GameObject ReconnectPopup_Object;
+
   [Header("Disconnection Popup")]
   [SerializeField] private Button CloseDisconnect_Button;
   [SerializeField] private GameObject DisconnectPopup_Object;
@@ -352,6 +355,11 @@ public class UIManager : MonoBehaviour
     }
   }
 
+  internal void ReconnectionPopup()
+  {
+    OpenPopup(ReconnectPopup_Object);
+  }
+
   internal void PopulateWin(int value)
   {
     switch (value)
@@ -482,26 +490,36 @@ public class UIManager : MonoBehaviour
 
   private void CallOnExitFunction()
   {
-    isExit = true;
     audioController.PlayButtonAudio();
-    slotManager.CallCloseSocket();
+    if (!isExit)
+    {
+      isExit = true;
+      audioController.PlayButtonAudio();
+      slotManager.CallCloseSocket();
+    }
   }
 
   private void OpenPopup(GameObject Popup)
   {
-    if (audioController) audioController.PlayButtonAudio();
-
     if (Popup) Popup.SetActive(true);
     if (MainPopup_Object) MainPopup_Object.SetActive(true);
   }
 
   private void ClosePopup(GameObject Popup)
   {
-    if (audioController) audioController.PlayButtonAudio();
     if (Popup) Popup.SetActive(false);
-    if (!DisconnectPopup_Object.activeSelf)
+    if (MainPopup_Object) MainPopup_Object.SetActive(false);
+  }
+
+  internal void CheckAndClosePopups()
+  {
+    if (ReconnectPopup_Object.activeInHierarchy)
     {
-      if (MainPopup_Object) MainPopup_Object.SetActive(false);
+      ClosePopup(ReconnectPopup_Object);
+    }
+    if (DisconnectPopup_Object.activeInHierarchy)
+    {
+      ClosePopup(DisconnectPopup_Object);
     }
   }
 

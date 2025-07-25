@@ -26315,7 +26315,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b851676ed72c447fa86d01251731b70e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainUITransform: {fileID: 1485219722}
+  UIWrapper: {fileID: 1485219722}
+  CanvasScaler: {fileID: 51930702}
+  MatchWidth: 0
+  MatchHeight: 1
+  PortraitMatchWandH: 0.5
+  transitionDuration: 0.2
+  waitForRotation: 0.2
 --- !u!4 &1884602475
 Transform:
   m_ObjectHideFlags: 0
