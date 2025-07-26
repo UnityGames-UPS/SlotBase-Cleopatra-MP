@@ -141,7 +141,7 @@ public class SocketIOManager : MonoBehaviour
     // Set subscriptions
     GameSocket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnConnected);
     GameSocket.On(SocketIOEventTypes.Disconnect, OnDisconnected); //Back2 Start
-    GameSocket.On(SocketIOEventTypes.Error, OnError);
+    GameSocket.On<Error>(SocketIOEventTypes.Error, OnError);
     GameSocket.On<string>("game:init", OnListenEvent);
     GameSocket.On<string>("result", OnListenEvent);
     GameSocket.On<bool>("socketState", OnSocketState);
@@ -188,9 +188,12 @@ public class SocketIOManager : MonoBehaviour
     Debug.Log($"📦 Pong payload: {data}");
   } //Back2 end
 
-  private void OnError()
+  private void OnError(Error err)
   {
-    Debug.LogError("Socket Error");
+    Debug.LogError("Socket Error Message: " + err);
+#if UNITY_WEBGL && !UNITY_EDITOR
+    JSManager.SendCustomMessage("error");
+#endif
   }
 
   private void OnListenEvent(string data)
