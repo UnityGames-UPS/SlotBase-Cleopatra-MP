@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Cleopatra</title>
+  <title>RockClimber</title>
   <style>
     body,
     html {
@@ -80,7 +80,7 @@
         codeUrl: buildUrl + "/Build.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
-        productName: "Cleopatra",
+        productName: "RockClimber",
         productVersion: "1.0",
       };
 
@@ -96,14 +96,12 @@
         };
         
         document.body.appendChild(script);
-        window.addEventListener('load', function(){
-          resizeCanvas()
-        });
+        window.addEventListener('load', resizeCanvas());
   </script>
      <script type="text/javascript">
-        // console.log = function() {};
-        // console.warn = function() {};
-        // console.error = function() {};
+        console.log = function() {};
+        console.warn = function() {};
+        console.error = function() {};
     </script>
     <script>
       window.focus();
