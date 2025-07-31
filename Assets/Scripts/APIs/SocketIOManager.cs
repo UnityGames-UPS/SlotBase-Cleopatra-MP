@@ -39,7 +39,6 @@ public class SocketIOManager : MonoBehaviour
 
   private float lastPongTime = 0f;
   private float pingInterval = 2f;
-  private float pongTimeout = 3f;
   private bool waitingForPong = false;
   private int missedPongs = 0;
   private const int MaxMissedPongs = 5;
@@ -295,6 +294,12 @@ public class SocketIOManager : MonoBehaviour
     {
       Debug.LogWarning("Socket is not connected.");
     }
+  }
+
+  void CloseGame()
+  {
+    Debug.Log("Unity: Closing Game");
+    StartCoroutine(CloseSocket());
   }
 
   internal IEnumerator CloseSocket() //Back2 Start
