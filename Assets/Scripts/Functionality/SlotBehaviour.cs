@@ -240,10 +240,11 @@ public class SlotBehaviour : MonoBehaviour
       StartSlots(false, true);
 
       yield return tweenroutine;
-      yield return new WaitForSeconds(SpinDelay);
+      yield return new WaitForSecondsRealtime(SpinDelay);
       i++;
     }
     IsFreeSpin = false;
+    yield return new WaitForSecondsRealtime(1f);
     yield return _bonusManager.BonusGameEndRoutine();
     if (WasAutoSpinOn)
     {
@@ -487,18 +488,10 @@ public class SlotBehaviour : MonoBehaviour
     }
 
     yield return new WaitUntil(() => !CheckPopups);
-    // while (CheckPopups)
-    // {
-    //   yield return null;
-    // }
 
     if ((IsFreeSpin || IsAutoSpin) && BoxAnimRoutine != null && !WinAnimationFin) // Waits for winning payline animation to finish when triggered bonus
     {
       yield return new WaitUntil(() => WinAnimationFin);
-      // while (WinAnimationFin)
-      // {
-      //   yield return null;
-      // }
       StopGameAnimation();
     }
 
@@ -667,12 +660,12 @@ public class SlotBehaviour : MonoBehaviour
         if (TotalWin_text) TotalWin_text.text = currentWin.ToString("f3");
         if (BigWin_Text) BigWin_Text.text = currentWin.ToString("f3");
       });
-      BalanceTween?.Kill();
-      DOTween.To(() => currentBal, (val) => currentBal = val, Balance, 0.8f).OnUpdate(() =>
-      {
-        if (Balance_text) Balance_text.text = currentBal.ToString("f3");
-      });
     }
+    BalanceTween?.Kill();
+    DOTween.To(() => currentBal, (val) => currentBal = val, Balance, 0.8f).OnUpdate(() =>
+    {
+      if (Balance_text) Balance_text.text = currentBal.ToString("f3");
+    });
   }
 
   private void BalanceDeduction()

@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5970,7 +5969,7 @@ MonoBehaviour:
   UiManager: {fileID: 377874625}
   JSManager: {fileID: 1604285695}
   TestSocketURI: http://localhost:5000/
-  TestToken: e8885d27602940b0906179619d64b11a
+  TestToken: 287ec7ce126342b38f9aa1b6820965d5
   RaycastBlocker: {fileID: 1151408184}
 --- !u!1 &500673622
 GameObject:
